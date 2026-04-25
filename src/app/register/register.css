@@ -1,0 +1,135 @@
+/* Centrar todo en la pantalla */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f8f9fa; /* Gris muy clarito */
+  padding: 20px;
+
+  background-image: url('../../assets/background-login.jpg'); 
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+/* Caja blanca con sombra */
+.login-box {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 450px;
+}
+
+h1 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  text-align: center;
+  color: #333;
+}
+
+p {
+  text-align: center;
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+/* Selector de Roles (🦆 Miembro / 💰 Comerciante) */
+.role-selector {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 1.5rem;
+}
+
+.role-selector label {
+  flex: 1;
+  cursor: pointer;
+}
+
+.role-selector input[type="radio"] {
+  display: none; /* Escondemos el circulito feo */
+}
+
+.role-selector span {
+  display: block;
+  text-align: center;
+  padding: 12px;
+  border: 2px solid #dee2e6;
+  border-radius: 12px;
+  transition: 0.3s;
+  font-weight: 500;
+}
+
+/* Cuando se selecciona un rol */
+.role-selector input[type="radio"]:checked + span {
+  border-color: #0d6efd;
+  background-color: #f0f7ff;
+  color: #0d6efd;
+}
+
+/* Estilo de los inputs */
+.input-group {
+  margin-bottom: 1.2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group label {
+  font-weight: 600;
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+}
+
+.input-group input {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: 0.2s;
+}
+
+.input-group input:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+}
+
+/* El botón de registro */
+.btn-login {
+  width: 100%;
+  padding: 14px;
+  background-color: #0d6efd;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: 0.3s;
+}
+
+.btn-login:hover {
+  background-color: #0b5ed7;
+  transform: translateY(-1px);
+}
+
+/* Link inferior */
+.register-link {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.register-link a {
+  color: #0d6efd;
+  text-decoration: none;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.register-link a:hover {
+  text-decoration: underline;
+}

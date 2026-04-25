@@ -1,0 +1,40 @@
+<div class="login-container">
+  <div class="login-box">
+    <h1>Únete a MacPato</h1>
+    <p>Crea tu cuenta según tu perfil</p>
+
+    <form (ngSubmit)="onRegister()">
+      <div class="role-selector">
+        <label>
+          <input type="radio" name="role" [(ngModel)]="nuevoUsuario.role" value="MIEMBRO" checked>
+          <span>🦆 Miembro</span>
+        </label>
+        <label>
+          <input type="radio" name="role" [(ngModel)]="nuevoUsuario.role" value="COMERCIANTE">
+          <span>💰 Comerciante</span>
+        </label>
+      </div>
+
+      <div class="input-group">
+        <label>Usuario</label>
+        <input type="text" name="username" [(ngModel)]="nuevoUsuario.username" placeholder="Ej: rico.mcpato" required>
+      </div>
+      
+      <div class="input-group">
+        <label>Email</label>
+        <input type="email" name="email" [(ngModel)]="nuevoUsuario.email" placeholder="ejemplo@correo.com" required>
+      </div>
+
+      <div class="input-group">
+        <label>Contraseña</label>
+        <input type="password" name="password" [(ngModel)]="nuevoUsuario.password" placeholder="••••••••" required>
+      </div>
+
+      <button type="submit" class="btn-login">Registrarme</button>
+      
+      <div class="register-link">
+        <a (click)="goToLogin()">¿Ya tienes cuenta? Inicia sesión</a>
+      </div>
+    </form>
+  </div>
+</div>

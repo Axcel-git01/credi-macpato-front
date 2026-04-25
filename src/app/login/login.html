@@ -1,0 +1,42 @@
+<div class="login-container">
+  <div class="login-box">
+    <h1>Credi-MacPato</h1>
+    <p>Ingresa tus credenciales para continuar</p>
+    
+    <form (ngSubmit)="onLogin()">
+      
+      @if (errorMsj) {
+        <div class="error-alert">
+          {{ errorMsj }}
+        </div>
+      }
+
+      <div class="input-group">
+        <label>Usuario</label>
+        <input 
+          type="text" 
+          name="username" 
+          [(ngModel)]="usuario" 
+          placeholder="Ej: rico.mcpato" 
+          required>
+      </div>
+
+      <div class="input-group">
+        <label>Contraseña</label>
+        <input 
+          type="password" 
+          name="password" 
+          [(ngModel)]="password" 
+          placeholder="••••••••" 
+          required>
+      </div>
+
+      <button type="submit" class="btn-login">Iniciar Sesión</button>
+      
+<div class="register-link">
+  <span>¿No tienes cuenta?</span>
+  <a (click)="goToRegister()">Regístrate aquí</a>
+</div>
+    </form>
+  </div>
+</div>

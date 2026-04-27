@@ -1,16 +1,16 @@
 import Decimal from "decimal.js";
 
 export interface BulkDebtRowRequestDTO {
-    standId: number;
-    issuerId: number;
-    customerId: number;
-    issueDate: Date;
+    standId: bigint;
+    issuerId: bigint;
+    customerId: bigint;
+    issueDate?: Date;
     igv: Decimal;
     voucherItems: [];
 }
 
 export interface BulkDebtUploadErrorDTO {
-    rowIndex: BigInteger;
+    rowIndex: number;
     message: string;
 }
 

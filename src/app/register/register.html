@@ -1,40 +1,77 @@
 <div class="login-container">
   <div class="login-box">
-    <h1>Únete a MacPato</h1>
-    <p>Crea tu cuenta según tu perfil</p>
+    <app-form-card [actions]="true">
+      <h1>Únete a MacPato</h1>
+      <p>Crea tu cuenta según tu perfil</p>
 
-    <form (ngSubmit)="onRegister()">
+      @if (errorMsg()) {
+        <div class="error-alert">{{ errorMsg() }}</div>
+      }
+
       <div class="role-selector">
-        <label>
-          <input type="radio" name="role" [(ngModel)]="nuevoUsuario.role" value="MIEMBRO" checked>
-          <span>🦆 Miembro</span>
-        </label>
-        <label>
-          <input type="radio" name="role" [(ngModel)]="nuevoUsuario.role" value="COMERCIANTE">
-          <span>💰 Comerciante</span>
-        </label>
+        <mat-radio-group [value]="profile()" (change)="profile.set($event.value)">
+          <mat-radio-button value="MEMBER">Miembro</mat-radio-button>
+          <mat-radio-button value="ASSOCIATION">Asociación</mat-radio-button>
+        </mat-radio-group>
       </div>
 
-      <div class="input-group">
-        <label>Usuario</label>
-        <input type="text" name="username" [(ngModel)]="nuevoUsuario.username" placeholder="Ej: rico.mcpato" required>
-      </div>
-      
-      <div class="input-group">
-        <label>Email</label>
-        <input type="email" name="email" [(ngModel)]="nuevoUsuario.email" placeholder="ejemplo@correo.com" required>
-      </div>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <app-text-field
+          [label]="'Usuario'"
+          [control]="form.controls.username"
+          [placeholder]="'Ej: rico.mcpato'"
+          [error]="form.controls.username.touched && form.controls.username.invalid ? 'Usuario requerido' : undefined" />
 
-      <div class="input-group">
-        <label>Contraseña</label>
-        <input type="password" name="password" [(ngModel)]="nuevoUsuario.password" placeholder="••••••••" required>
-      </div>
+        <app-password-field
+          [label]="'Contraseña'"
+          [control]="form.controls.password"
+          [error]="form.controls.password.touched && form.controls.password.invalid ? 'Contraseña requerida' : undefined" />
 
-      <button type="submit" class="btn-login">Registrarme</button>
-      
-      <div class="register-link">
-        <a (click)="goToLogin()">¿Ya tienes cuenta? Inicia sesión</a>
+        <mat-divider style="margin: 12px 0;"></mat-divider>
+
+        @if (isMember()) {
+          <app-select-field
+            [label]="'Tipo de miembro'"
+            [value]="memberRole()"
+            (valueChange)="memberRole.set($event)"
+            [options]="roleOptions" />
+
+          <app-select-field
+            [label]="'Tipo de dato'"
+            [value]="memberKind()"
+            (valueChange)="memberKind.set($event)"
+            [options]="kindOptions" />
+
+          @if (isVendor()) {
+            <app-number-field
+              [label]="'Association ID'"
+              [control]="$any(form.controls.associationId)"
+              [placeholder]="'Ej: 1'" />
+          }
+
+          @switch (memberKind()) {
+            @case ('PERSON') {
+              <app-text-field [label]="'Nombre'" [control]="form.controls.name" />
+              <app-text-field [label]="'Apellido'" [control]="form.controls.lastname" />
+            }
+            @default {
+              <app-text-field [label]="'Razón social'" [control]="form.controls.registrationName" />
+              <app-text-field [label]="'Dirección'" [control]="form.controls.address" />
+            }
+          }
+        } @else {
+          <app-text-field [label]="'Razón social'" [control]="form.controls.registrationName" />
+          <app-text-field [label]="'Dirección'" [control]="form.controls.address" />
+        }
+      </form>
+
+      <div actions>
+        <app-submit-bar
+          [loading]="loading()"
+          [submitText]="'Registrarme'"
+          [cancelText]="'Ir a login'"
+          (cancel)="goToLogin()" />
       </div>
-    </form>
+    </app-form-card>
   </div>
 </div>

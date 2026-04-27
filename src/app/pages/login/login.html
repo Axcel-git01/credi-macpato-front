@@ -1,0 +1,33 @@
+<div class="login-container">
+  <div class="login-box">
+    <app-form-card [actions]="true">
+      <h1>Credi-MacPato</h1>
+      <p>Ingresa tus credenciales para continuar</p>
+
+      @if (errorMsj()) {
+        <div class="error-alert">{{ errorMsj() }}</div>
+      }
+
+      <form [formGroup]="form" (ngSubmit)="onLogin()">
+        <app-text-field
+          [label]="'Usuario'"
+          [control]="form.controls.username"
+          [placeholder]="'Ej: rico.mcpato'"
+          [error]="form.controls.username.touched && form.controls.username.invalid ? 'Usuario requerido' : undefined" />
+
+        <app-password-field
+          [label]="'Contraseña'"
+          [control]="form.controls.password"
+          [error]="form.controls.password.touched && form.controls.password.invalid ? 'Contraseña requerida' : undefined" />
+      </form>
+
+      <div actions>
+        <app-submit-bar
+          [loading]="loading()"
+          [submitText]="'Iniciar sesión'"
+          [cancelText]="'Registrarme'"
+          (cancel)="goToRegister()" />
+      </div>
+    </app-form-card>
+  </div>
+</div>

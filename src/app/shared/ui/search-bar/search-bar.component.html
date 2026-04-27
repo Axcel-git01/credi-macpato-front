@@ -1,0 +1,27 @@
+<mat-form-field appearance="outline" class="search">
+  <mat-label>{{ label }}</mat-label>
+  <input matInput [formControl]="control" [placeholder]="placeholder" (input)="emit()" />
+
+  @switch (clearMode) {
+    @case ('never') {
+      <!-- sin botón -->
+    }
+    @case ('always') {
+      <button mat-icon-button matSuffix type="button" aria-label="Limpiar" (click)="clear()">
+        <mat-icon>close</mat-icon>
+      </button>
+    }
+    @default {
+      @if (control.value) {
+        <button mat-icon-button matSuffix type="button" aria-label="Limpiar" (click)="clear()">
+          <mat-icon>close</mat-icon>
+        </button>
+      }
+    }
+  }
+
+  @if (hint) {
+    <mat-hint>{{ hint }}</mat-hint>
+  }
+</mat-form-field>
+

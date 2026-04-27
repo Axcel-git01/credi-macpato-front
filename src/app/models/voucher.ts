@@ -2,16 +2,16 @@ import Decimal from "decimal.js";
 import { VoucherItemRequestDTO } from "./voucherItem";
 
 export interface VoucherRequestDTO {
-    igv: Decimal;
+    igv: string;
     voucherItems: VoucherItemRequestDTO[];
-    issuerId: number;
-    customerId: number;
-    standId: number;
+    issuerId: bigint;
+    customerId: bigint;
+    standId: bigint;
 
 }
 
 export interface VoucherResponseDTO {
-    id: number;
+    id: bigint;
     serialNumber: string;
     state: PaymentState;
     issueDate: Date;
@@ -20,10 +20,11 @@ export interface VoucherResponseDTO {
     lineExtensionAmount: Decimal;
     payableAmount: Decimal;
     voucherItems: VoucherItemRequestDTO[];
-    issuerId: number;
-    customerId: number;
-    standId: number;
-
+    issuerId: bigint;
+    customerId: bigint;
+    standId: bigint;
+    pendingAmount: Decimal;
+    paidAmount: Decimal;
 }
 export enum  PaymentState{
     PENDING,

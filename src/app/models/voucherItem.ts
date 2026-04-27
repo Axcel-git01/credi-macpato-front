@@ -1,38 +1,33 @@
 import Decimal from "decimal.js";
-import { ChargeResponseDTO } from "./chargeresponse";
 import { PaymentState } from "./voucher";
+import {ChargeResponseDTO} from './charge';
 
 export interface VoucherItemRequestDTO {
     quantity: Decimal;
     measureUnitType: MeasureUnitType;
-    chargeReasonId: number;
+    chargeReasonId: bigint;
     unitValue: Decimal;
 }
 
 export enum MeasureUnitType{
-    NIU,
-    KGM,
-    LTR,
-    MTR,
-    MTK,
-    MTQ,
-    CS,
-    BX,
-    PR,
-    ZZ,
+    NIU, KGM, LTR, MTR, MTK, MTQ,
+    CS, BX, PR, ZZ,
 }
 
 export interface VoucherItemResponseDTO {
-    id: number;
+    id: bigint;
     quantity: Decimal;
-    measureUnitType: MeasureUnitType;
+    measureUnitType: MeasureUnitTypeResponse;
     charge: ChargeResponseDTO;
     unitValue: Decimal;
     payableAmount: Decimal;
     state: PaymentState;
-    voucherId: number;
-    paymentId: number;
+    voucherId: bigint;
+    paymentId: bigint;
 }
 
-
-
+export interface MeasureUnitTypeResponse {
+  description: string;
+  typicalUse: string;
+  unitCode: string;
+}

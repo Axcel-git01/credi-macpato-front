@@ -12,7 +12,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     <div class="bar">
       <button mat-button type="button" (click)="cancel.emit()" [disabled]="loading">{{ cancelText }}</button>
 
-      <button mat-flat-button color="primary" type="submit" [disabled]="disabled || loading">
+      <button mat-flat-button color="primary" type="submit" [disabled]="disabled || loading" (click)="submit.emit()">
         @if (loading) {
           <mat-progress-spinner diameter="18" mode="indeterminate" class="bar__spinner" />
         }
@@ -34,6 +34,7 @@ export class SubmitBarComponent {
   @Input() disabled = false;
 
   @Output() cancel = new EventEmitter<void>();
+  @Output() submit = new EventEmitter<void>();
 }
 
 

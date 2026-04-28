@@ -12,22 +12,22 @@ export type UserRequest =
   | BusinessCustomerRequestDTO | BusinessVendorRequestDTO
 
 export enum UserType {
-    PERSON_CUSTOMER,
-    BUSINESS_CUSTOMER,
-    ASSOCIATION,
-    BUSINESS_VENDOR,
-    PERSON_VENDOR
+    PERSON_CUSTOMER = "PERSON_CUSTOMER",
+    BUSINESS_CUSTOMER = "BUSINESS_CUSTOMER",
+    ASSOCIATION = "ASSOCIATION",
+    BUSINESS_VENDOR = "BUSINESS_VENDOR",
+    PERSON_VENDOR = "PERSON_VENDOR"
 }
 export enum Role {
-    VENDOR,
-    CUSTOMER,
-    ASSOCIATION
+    VENDOR = "VENDOR",
+    CUSTOMER = "CUSTOMER",
+    ASSOCIATION = "ASSOCIATION"
 }
 
 export enum UserState {
-    ENABLED,
-    BLOCKED,
-    DISABLED
+    ENABLED = "ENABLED",
+    BLOCKED = "BLOCKED",
+    DISABLED = "DISABLED"
 }
 
 export interface AssociationRequestDTO extends UserRequestDTO {
@@ -36,7 +36,7 @@ export interface AssociationRequestDTO extends UserRequestDTO {
 }
 
 export interface CustomerRequestDTO extends UserRequestDTO {
-  associationId: bigint;
+  associationId: string;
 }
 
 export interface PersonCustomerRequestDTO extends  CustomerRequestDTO {
@@ -50,7 +50,7 @@ export interface BusinessCustomerRequestDTO extends CustomerRequestDTO {
 }
 
 export interface VendorRequestDTO extends UserRequestDTO {
-  associationId: bigint;
+  associationId: string;
 }
 
 export interface PersonVendorRequestDTO extends VendorRequestDTO{

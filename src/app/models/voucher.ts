@@ -4,9 +4,9 @@ import { VoucherItemRequestDTO } from "./voucherItem";
 export interface VoucherRequestDTO {
     igv: string;
     voucherItems: VoucherItemRequestDTO[];
-    issuerId: bigint;
-    customerId: bigint;
-    standId: bigint;
+    issuerId: string;
+    customerId: string;
+    standId: string;
 
 }
 
@@ -27,7 +27,7 @@ export interface VoucherResponseDTO {
     paidAmount: Decimal;
 }
 export enum  PaymentState{
-    PENDING,
-    PAID,
-    PARTIALLY_PAID
+    PENDING = "PENDING",
+    PAID = "PAID",
+    PARTIALLY_PAID = "PARTIALLY_PAID"
 }

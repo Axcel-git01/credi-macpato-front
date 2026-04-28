@@ -1,5 +1,6 @@
-import { Component, Input, TemplateRef } from '@angular/core';
+import { Component, Input, TemplateRef, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,7 +10,7 @@ export interface DataTableColumn<T> {
   key: string;
   header: string;
   cell?: (row: T) => string | number | null | undefined;
-  // Si se da template, se renderiza en vez de cell()
+  hideOnHandset?: boolean;
   template?: TemplateRef<{ $implicit: T }>
 }
 
@@ -60,6 +61,12 @@ export interface DataTableColumn<T> {
 export class DataTableComponent<T> {
   @Input({ required: true }) rows: readonly T[] = [];
   @Input({ required: true }) columns: readonly DataTableColumn<T>[] = [];
+  private bp = inject(BreakpointObserver);
+  private isHandset = signal(false);
+
+  constructor() {
+    this.bp.observe([Breakpoints.Handset]).subscribe(r => this.isHandset.set(!!r.matches));
+  }
 
   /** Texto por defecto para estado vacío (si no se provee emptyTemplate). */
   @Input() emptyText = 'Sin resultados';
@@ -72,7 +79,11 @@ export class DataTableComponent<T> {
   }
 
   get displayedColumnKeys(): string[] {
-    return (this.columns ?? []).map(c => c.key);
+    const cols = this.columns ?? [];
+    if (this.isHandset()) {
+      return cols.filter(c => !c.hideOnHandset).map(c => c.key);
+    }
+    return cols.map(c => c.key);
   }
 }
 

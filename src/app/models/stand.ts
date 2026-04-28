@@ -1,5 +1,5 @@
 export interface StandRequestDTO {
-  ownerId: bigint;
+  ownerId: string;
   description: string;
 }
 

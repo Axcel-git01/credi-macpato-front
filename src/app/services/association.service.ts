@@ -23,4 +23,8 @@ export class AssociationService {
   listMembers(associationId: bigint): Observable<UserResponse[]> {
     return this.http.get<UserResponse[]>(`${this.apiUrl}/${associationId}/members`);
   }
+
+  listAll(): Observable<UserResponse[]> {
+    return this.http.get<UserResponse[]>(`${this.apiUrl}`);
+  }
 }

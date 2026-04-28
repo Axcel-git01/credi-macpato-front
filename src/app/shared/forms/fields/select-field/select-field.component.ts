@@ -26,12 +26,13 @@ export interface SelectOption<T> {
           <mat-option [disabled]="true">Sin opciones</mat-option>
         }
       </mat-select>
-      @if (hint) {
-        <mat-hint>{{ hint }}</mat-hint>
-      }
-      @if (error) {
-        <mat-error>{{ error }}</mat-error>
-      }
+      <!--
+        SSR/Hydration: evitar crear/destruir nodos proyectados de MatFormField con @if,
+        porque puede producir mismatches (NG0500) entre server y cliente.
+        Renderizamos siempre hint/error y solo variamos el texto.
+      -->
+      <mat-hint>{{ hint ?? '\u00A0' }}</mat-hint>
+      <mat-error>{{ error ?? '' }}</mat-error>
     </mat-form-field>
   `,
   styles: [`.field{ width: 100%; }`],

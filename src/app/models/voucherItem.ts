@@ -5,13 +5,13 @@ import {ChargeResponseDTO} from './charge';
 export interface VoucherItemRequestDTO {
     quantity: Decimal;
     measureUnitType: MeasureUnitType;
-    chargeReasonId: bigint;
+    chargeReasonId: string;
     unitValue: Decimal;
 }
 
 export enum MeasureUnitType{
-    NIU, KGM, LTR, MTR, MTK, MTQ,
-    CS, BX, PR, ZZ,
+    NIU = "NIU", KGM = "KGM", LTR = "LTR", MTR = "MTR", MTK = "MTK", MTQ = "MTQ",
+    CS = "CS", BX = "BX", PR = "PR", ZZ = "ZZ",
 }
 
 export interface VoucherItemResponseDTO {

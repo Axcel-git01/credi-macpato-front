@@ -1,0 +1,167 @@
+<mat-toolbar color="primary" class="topbar">
+  <a class="brand" routerLink="/">Credi‑MacPato</a>
+
+  <span class="spacer"></span>
+
+  <nav class="nav">
+    <a mat-button routerLink="/">Inicio</a>
+    <a mat-button routerLink="/register">Regístrate</a>
+    <a mat-stroked-button routerLink="/login">INGRESAR</a>
+  </nav>
+</mat-toolbar>
+
+<main class="page">
+  <!-- 1) Hero -->
+  <section class="hero">
+    <div class="hero__content">
+      <h1>Gestión de ventas y pagos en tu asociación, todo en un solo lugar</h1>
+      <p class="hero__subtitle">
+        Registra tus ventas, controla deudas y realiza pagos de manera rápida y transparente.
+      </p>
+
+      <div class="hero__cta">
+        <a mat-flat-button color="primary" routerLink="/register">Regístrate ahora</a>
+        <a mat-button routerLink="/login">Ya tengo cuenta</a>
+      </div>
+    </div>
+
+    <mat-card class="hero__visual" appearance="outlined">
+      <mat-card-content>
+        <div class="visual">
+          <div class="visual__badge">Dashboard</div>
+          <div class="visual__row">
+            <div class="visual__kpi">
+              <div class="visual__kpiLabel">Ventas</div>
+              <div class="visual__kpiValue">$ 12,450</div>
+            </div>
+            <div class="visual__kpi">
+              <div class="visual__kpiLabel">Pagos</div>
+              <div class="visual__kpiValue">$ 9,110</div>
+            </div>
+          </div>
+          <div class="visual__list">
+            <div class="visual__item">
+              <mat-icon>receipt_long</mat-icon>
+              <span>Vouchers y comprobantes</span>
+            </div>
+            <div class="visual__item">
+              <mat-icon>query_stats</mat-icon>
+              <span>Reportes por rango</span>
+            </div>
+            <div class="visual__item">
+              <mat-icon>payments</mat-icon>
+              <span>Pagos y conciliación</span>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </section>
+
+  <mat-divider></mat-divider>
+
+  <!-- 2) Beneficios clave -->
+  <section class="section">
+    <header class="section__header">
+      <h2>Beneficios clave</h2>
+      <p>Una solución clara para comerciantes, clientes y la asociación.</p>
+    </header>
+
+    <div class="grid grid--3">
+      @for (b of benefits; track b.title) {
+        <mat-card appearance="outlined" class="card">
+          <mat-card-content>
+            <div class="card__icon">
+              <mat-icon>{{ b.icon }}</mat-icon>
+            </div>
+            <h3 class="card__title">{{ b.title }}</h3>
+            <p class="card__text">{{ b.text }}</p>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  </section>
+
+  <!-- 3) Cómo funciona -->
+  <section class="section section--alt">
+    <header class="section__header">
+      <h2>Cómo funciona</h2>
+      <p>Empieza en minutos con un flujo simple.</p>
+    </header>
+
+    <div class="grid grid--3">
+      @for (s of steps; track s.title) {
+        <mat-card appearance="outlined" class="card">
+          <mat-card-content>
+            <h3 class="card__title">{{ s.title }}</h3>
+            <p class="card__text">{{ s.text }}</p>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  </section>
+
+  <!-- 4) Testimonios / Confianza -->
+  <section class="section">
+    <header class="section__header">
+      <h2>Confianza y transparencia</h2>
+      <p>Historias reales (puedes reemplazar por datos reales cuando los tengas).</p>
+    </header>
+
+    <div class="grid grid--3">
+      @for (t of testimonials; track t.quote) {
+        <mat-card appearance="outlined" class="card">
+          <mat-card-content>
+            <p class="quote">“{{ t.quote }}”</p>
+            <div class="quote__author">
+              <strong>{{ t.author }}</strong>
+              @if (t.role) {
+                <span class="quote__role">— {{ t.role }}</span>
+              }
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  </section>
+
+  <!-- 5) CTA Secundario -->
+  <section class="cta">
+    <mat-card class="cta__card" appearance="outlined">
+      <mat-card-content>
+        <div class="cta__content">
+          <div>
+            <h2>Empieza gratis</h2>
+            <p>Registra tu cuenta y comienza a gestionar ventas, pagos y reportes.</p>
+          </div>
+          <div class="cta__actions">
+            <a mat-flat-button color="primary" routerLink="/register">Empieza ahora</a>
+            <a mat-stroked-button color="primary" routerLink="/login">Ingresar</a>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </section>
+</main>
+
+<!-- 6) Footer -->
+<footer class="footer">
+  <div class="footer__inner">
+    <div>
+      <div class="footer__brand">Credi‑MacPato</div>
+      <div class="footer__meta">Gestión de ventas, deudas y pagos para asociaciones.</div>
+    </div>
+
+    <div class="footer__links">
+      <a routerLink="/register">Registro</a>
+      <a routerLink="/login">Login</a>
+      <a routerLink="/">Preguntas frecuentes</a>
+    </div>
+
+    <div class="footer__legal">
+      <a routerLink="/">Aviso de privacidad</a>
+      <a routerLink="/">Términos de uso</a>
+    </div>
+  </div>
+</footer>
+

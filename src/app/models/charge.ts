@@ -1,6 +1,6 @@
 export interface ChargeRequestDTO {
     description: string;
-    standId: bigint;
+    standId: string;
 }
 
 export interface ChargeResponseDTO {

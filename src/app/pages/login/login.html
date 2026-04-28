@@ -4,8 +4,8 @@
       <h1>Credi-MacPato</h1>
       <p>Ingresa tus credenciales para continuar</p>
 
-      @if (errorMsj()) {
-        <div class="error-alert">{{ errorMsj() }}</div>
+      @if (errorMsg()) {
+        <div class="error-alert">{{ errorMsg() }}</div>
       }
 
       <form [formGroup]="form" (ngSubmit)="onLogin()">
@@ -19,15 +19,15 @@
           [label]="'Contraseña'"
           [control]="form.controls.password"
           [error]="form.controls.password.touched && form.controls.password.invalid ? 'Contraseña requerida' : undefined" />
-      </form>
 
-      <div actions>
-        <app-submit-bar
-          [loading]="loading()"
-          [submitText]="'Iniciar sesión'"
-          [cancelText]="'Registrarme'"
-          (cancel)="goToRegister()" />
-      </div>
+        <div actions>
+          <app-submit-bar
+            [loading]="loading()"
+            [submitText]="'Iniciar sesión'"
+            [cancelText]="'Registrarme'"
+            (cancel)="goToRegister()" />
+        </div>
+      </form>
     </app-form-card>
   </div>
 </div>

@@ -7,17 +7,18 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatDividerModule } from '@angular/material/divider';
 
-import { AuthService } from '../services/auth.service';
 import { Role, UserRequest, UserState, UserType } from '../models/user.request';
 import { ErrorResponse } from '../models/error.response';
 
 import { FormCardComponent } from '../shared/forms/form-card/form-card.component';
 import { TextFieldComponent } from '../shared/forms/fields/text-field/text-field.component';
 import { PasswordFieldComponent } from '../shared/forms/fields/password-field/password-field.component';
-import { NumberFieldComponent } from '../shared/forms/fields/number-field/number-field.component';
 import { SelectFieldComponent, SelectOption } from '../shared/forms/fields/select-field/select-field.component';
 import { SubmitBarComponent } from '../shared/forms/submit-bar/submit-bar.component';
 import {UserService} from '../services/user.service';
+import { ToastService } from '../shared/ui/toast/toast.service';
+import { AssociationService } from '../services/association.service';
+import { AssociationResponseDTO } from '../models/user.response';
 
 @Component({
   selector: 'app-register',
@@ -32,19 +33,18 @@ import {UserService} from '../services/user.service';
     PasswordFieldComponent,
     SelectFieldComponent,
     SubmitBarComponent,
-    NumberFieldComponent,
   ],
   templateUrl: './register.html',
   styleUrls: ['./register.css']
 })
 export class Register {
   private userService = inject(UserService);
+  private associationService = inject(AssociationService);
   private router = inject(Router);
+  private toast = inject(ToastService);
 
   loading = signal(false);
   errorMsg = signal<string | null>(null);
-
-  // Selecciones de UI
   profile = signal<'MEMBER' | 'ASSOCIATION'>('MEMBER');
   memberRole = signal<'CUSTOMER' | 'VENDOR'>('CUSTOMER');
   memberKind = signal<'PERSON' | 'BUSINESS'>('PERSON');
@@ -59,38 +59,68 @@ export class Register {
     { value: 'BUSINESS', label: 'Negocio' },
   ];
 
+  associationsLoading = signal(false);
+  associations = signal<AssociationResponseDTO[]>([]);
+  associationOptions = computed((): SelectOption<string>[] =>
+    this.associations().map((a) => ({
+      value: String((a as unknown as { id: bigint }).id),
+      label: a.registrationName ?? a.fullName ?? a.username,
+    }))
+  );
+
   form = new FormGroup({
     username: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
     password: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
 
-      // Relación con asociación (según los DTO actuales, CustomerRequestDTO también lo requiere)
-      associationId: new FormControl<bigint | null>(null),
+    associationId: new FormControl<string | null>(null, { validators: [Validators.required] }),
 
-    // Persona
     name: new FormControl<string>('', { nonNullable: true }),
     lastname: new FormControl<string>('', { nonNullable: true }),
 
-    // Negocio / Asociación
     registrationName: new FormControl<string>('', { nonNullable: true }),
     address: new FormControl<string>('', { nonNullable: true }),
   });
 
-  // helpers
   isAssociation = computed(() => this.profile() === 'ASSOCIATION');
   isMember = computed(() => this.profile() === 'MEMBER');
-  isVendor = computed(() => this.memberRole() === 'VENDOR');
   isCustomer = computed(() => this.memberRole() === 'CUSTOMER');
   isPerson = computed(() => this.memberKind() === 'PERSON');
-  isBusiness = computed(() => this.memberKind() === 'BUSINESS');
 
   goToLogin(): void {
     this.router.navigate(['/login']);
   }
 
+  constructor() {
+    this.loadAssociations();
+  }
+
+  private loadAssociations(): void {
+    this.associationsLoading.set(true);
+    this.associationService.listAll().subscribe({
+      next: (items) => {
+        this.associations.set(items as AssociationResponseDTO[]);
+        this.associationsLoading.set(false);
+        console.table(items);
+      },
+      error: (err: HttpErrorResponse) => {
+        this.associationsLoading.set(false);
+        const apiError = err.error as ErrorResponse | undefined;
+        this.toast.error(apiError?.message ?? 'No se pudieron cargar las asociaciones.');
+      },
+    });
+  }
+
+  onAssociationSelected(id: string | null): void {
+    if (!id) {
+      this.form.controls.associationId.setValue(null);
+      return;
+    }
+    this.form.controls.associationId.setValue(id);
+  }
+
   onSubmit(): void {
     this.errorMsg.set(null);
 
-    // Validación dinámica mínima
     if (this.form.controls.username.invalid || this.form.controls.password.invalid) {
       this.form.controls.username.markAsTouched();
       this.form.controls.password.markAsTouched();
@@ -107,7 +137,6 @@ export class Register {
     let payload: UserRequest;
 
     if (this.isAssociation()) {
-      // Asociación
       if (!this.form.controls.registrationName.value || !this.form.controls.address.value) {
         this.errorMsg.set('Completa razón social y dirección.');
         return;
@@ -121,10 +150,9 @@ export class Register {
         address: this.form.controls.address.value,
       };
     } else {
-      // Miembro: Customer/Vendor + Person/Business
-      const assocId: bigint | null = this.form.controls.associationId.value;
+      const assocId: string | null = this.form.controls.associationId.value;
       if (assocId === null || assocId === undefined) {
-        this.errorMsg.set('associationId es requerido para registrar un miembro.');
+        this.errorMsg.set('Selecciona una asociación para registrar un miembro.');
         return;
       }
 
@@ -182,11 +210,13 @@ export class Register {
     this.userService.register(payload).subscribe({
       next: () => {
         this.loading.set(false);
+        this.toast.success('Cuenta creada correctamente. Ahora puedes iniciar sesión.');
         this.router.navigate(['/login']);
       },
-      error: (err: ErrorResponse) => {
+      error: (err: HttpErrorResponse) => {
         this.loading.set(false);
-        this.errorMsg.set(err.message ?? 'Hubo un error al crear la cuenta. Revisa los datos.');
+        const apiError = err.error as ErrorResponse | undefined;
+        this.toast.error(apiError?.message ?? 'Hubo un error al crear la cuenta, revisa los datos.');
       },
     });
   }

@@ -19,12 +19,9 @@ import { MatInputModule } from '@angular/material/input';
         [formControl]="control"
         [autocomplete]="autocomplete"
       />
-      @if (hint) {
-        <mat-hint>{{ hint }}</mat-hint>
-      }
-      @if (error) {
-        <mat-error>{{ error }}</mat-error>
-      }
+      <!-- Estabiliza DOM para SSR/hydration (evita NG0500) -->
+      <mat-hint>{{ hint ?? '\u00A0' }}</mat-hint>
+      <mat-error>{{ error ?? '' }}</mat-error>
     </mat-form-field>
   `,
   styles: [`.field{ width: 100%; }`],

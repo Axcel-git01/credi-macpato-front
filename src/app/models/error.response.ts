@@ -3,6 +3,5 @@ export interface ErrorResponse {
   path: string;
   message: string;
   status: number;
-  timestamp: Date;
+  timestamp: string;
 }
-

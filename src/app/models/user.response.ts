@@ -1,10 +1,14 @@
-import {Role, UserState} from "./user.request";
+import {UserState} from "./user.request";
 import Decimal from 'decimal.js';
+
+export interface RoleResponse {
+  displayName: string;
+}
 
 export interface UserResponseDTO {
   id: bigint;
   username: string;
-  role: Role;
+  role: RoleResponse;
   state: UserState;
   createdAt: Date
   fullName: string;
@@ -36,12 +40,12 @@ export interface BusinessCustomerResponseDTO extends CustomerResponseDTO {
 }
 
 export interface VendorResponseDTO extends UserResponseDTO {
+  associationId: bigint;
   moneyBalance: Decimal;
 }
 
 
 export interface PersonVendorResponseDTO extends VendorResponseDTO {
-  associationId: bigint;
   name: string;
   lastname: string;
 }

@@ -1,10 +1,8 @@
-import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
+import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { catchError, throwError } from 'rxjs';
 
 import { API_BASE_URL} from '../config/api.config';
 import { AuthService } from './auth.service';
-import {ErrorResponse} from '../models/error.response';
 
 const PUBLIC_PATHS = ['/auth/login', '/auth/register'];
 
@@ -27,14 +25,6 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
   const authReq = token
 	? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } })
 	: req;
-
-  return next(authReq).pipe(
-	catchError((err: ErrorResponse) => {
-	  if (err.status === 401) {
-		authService.logout();
-	  }
-	  return throwError(() => err);
-	})
-  );
+  return next(authReq);
 };
 

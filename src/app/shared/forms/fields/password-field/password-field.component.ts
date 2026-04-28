@@ -25,12 +25,9 @@ import { MatButtonModule } from '@angular/material/button';
       <button mat-icon-button matSuffix type="button" (click)="toggle()" [attr.aria-label]="'Mostrar contraseña'">
         <mat-icon>{{ hidden() ? 'visibility' : 'visibility_off' }}</mat-icon>
       </button>
-      @if (hint) {
-        <mat-hint>{{ hint }}</mat-hint>
-      }
-      @if (error) {
-        <mat-error>{{ error }}</mat-error>
-      }
+      <!-- Estabiliza DOM para SSR/hydration (evita NG0500) -->
+      <mat-hint>{{ hint ?? '\u00A0' }}</mat-hint>
+      <mat-error>{{ error ?? '' }}</mat-error>
     </mat-form-field>
   `,
   styles: [`.field{ width: 100%; }`],

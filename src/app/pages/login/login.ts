@@ -30,7 +30,7 @@ export class Login {
   private router = inject(Router);
 
   loading = signal(false);
-  errorMsj = signal<string | null>(null);
+  errorMsg = signal<string | null>(null);
 
   form = new FormGroup({
     username: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
@@ -42,11 +42,11 @@ export class Login {
   }
 
   onLogin() {
-    this.errorMsj.set(null);
+    this.errorMsg.set(null);
 
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      this.errorMsj.set('Por favor, completa todos los campos.');
+      this.errorMsg.set('Por favor, completa todos los campos.');
       return;
     }
 
@@ -59,12 +59,12 @@ export class Login {
     this.authService.login(datosLogin).subscribe({
       next: () => {
         this.loading.set(false);
-        this.router.navigate(['/']);
+        this.router.navigate(['/home']);
       },
       error: (err: HttpErrorResponse) => {
         this.loading.set(false);
         const apiError = err.error as ErrorResponse | undefined;
-        this.errorMsj.set(apiError?.message ?? 'Usuario o contraseña incorrectos.');
+        this.errorMsg.set(apiError?.message ?? 'Usuario o contraseña incorrectos.');
       },
     });
   }

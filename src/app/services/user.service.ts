@@ -1,10 +1,10 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { API_BASE_URL } from '../config/api.config';
 import { UserRequest } from '../models/user.request';
-import { UserResponse } from '../models/user.response';
+import {AssociationResponseDTO, CustomerResponseDTO, UserResponse, VendorResponseDTO} from '../models/user.response';
 
 @Injectable({
   providedIn: 'root',
@@ -43,5 +43,11 @@ export class UserService {
 
   block(id: bigint): Observable<UserResponse> {
     return this.http.post<UserResponse>(`${this.apiUrl}/${id}/block`, null);
+  }
+
+  searchByName(q: string): Observable<UserResponse[]> {
+    let params = new HttpParams();
+    params = params.set("string", q);
+    return this.http.get<UserResponse[]>(`${this.apiUrl}/search`, {params});
   }
 }

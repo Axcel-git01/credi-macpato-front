@@ -1,17 +1,27 @@
-import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs';
+import {Injectable, inject, computed} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {tap} from 'rxjs';
 
 import {API_BASE_URL} from '../config/api.config';
 import { LoginRequestDTO, LoginResponseDTO } from '../models/login';
 import {UserResponse} from '../models/user.response';
+import {jwtDecode, JwtPayload} from 'jwt-decode';
 
+interface JwtCustomPayload extends JwtPayload {
+  roles?: string[] | string;
+  authorities?: string[] | string;
+}
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private http = inject(HttpClient);
   private apiUrl = `${API_BASE_URL}/auth`;
+
+  roles = computed(() => this.getCurrentUserRoles());
+  isAssociation = computed(() => this.roles().includes('ROLE_ASSOCIATION'));
+  isVendor = computed(() => this.roles().includes('ROLE_VENDOR'));
+  isCustomer = computed(() => this.roles().includes('ROLE_CUSTOMER'));
 
   login(loginRequest: LoginRequestDTO) {
     return this.http.post<LoginResponseDTO>(`${this.apiUrl}/login`, loginRequest).pipe(
@@ -41,25 +51,30 @@ export class AuthService {
     }
   }
 
-  getCurrentUserRoles(): string[] {
-    const user = this.getCurrentUser();
-    if (!user) return [];
 
-    const rawRole = (user as unknown as { role?: string }).role;
-    if (!rawRole) return [];
+getCurrentUserRoles(): string[] {
+  if (!this.getToken()) return [];
+  const token: string = this.getToken()!;
 
-    const normalized = rawRole.startsWith('ROLE_') ? rawRole : `ROLE_${rawRole}`;
-    return [normalized];
-  }
+  const decoded = jwtDecode<JwtCustomPayload>(token);
 
-  logout(): void {
+  const rawRoles = decoded.roles ?? decoded.authorities;
+  if (!rawRoles) return [];
+
+  const rolesArray: string[] = Array.isArray(rawRoles)
+    ? rawRoles.map(String)
+    : [String(rawRoles)];
+
+  return rolesArray.map(r => r.startsWith('ROLE_') ? r : `ROLE_${r}`);
+}
+
+
+logout(): void {
     if (typeof window === 'undefined') return;
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    localStorage.clear();
   }
 
   isLoggedIn(): boolean {
-    // Esto verifica si estamos en el navegador para evitar errores de SSR
     if (typeof window !== 'undefined') {
       return !!localStorage.getItem('token');
     }

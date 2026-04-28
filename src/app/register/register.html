@@ -31,22 +31,27 @@
 
         @if (isMember()) {
           <app-select-field
+            [label]="'Asociación'"
+            [value]="form.controls.associationId.value ? form.controls.associationId.value.toString() : null"
+            (valueChange)="onAssociationSelected($event)"
+            [options]="associationOptions()"
+            [hint]="associationsLoading() ? 'Cargando asociaciones...': ''"
+            [error]="form.controls.associationId.touched && form.controls.associationId.invalid ? 'Selecciona una asociación' : undefined" />
+
+          <app-select-field
             [label]="'Tipo de miembro'"
             [value]="memberRole()"
             (valueChange)="memberRole.set($event)"
             [options]="roleOptions" />
 
           <app-select-field
-            [label]="'Tipo de dato'"
+            [label]="'Tipo de Miembro'"
             [value]="memberKind()"
             (valueChange)="memberKind.set($event)"
             [options]="kindOptions" />
 
-          @if (isVendor()) {
-            <app-number-field
-              [label]="'Association ID'"
-              [control]="$any(form.controls.associationId)"
-              [placeholder]="'Ej: 1'" />
+          @if (!associationOptions().length && !associationsLoading()) {
+            <p style="margin: 8px 0; opacity: .8;">No hay asociaciones disponibles para seleccionar.</p>
           }
 
           @switch (memberKind()) {
@@ -63,15 +68,12 @@
           <app-text-field [label]="'Razón social'" [control]="form.controls.registrationName" />
           <app-text-field [label]="'Dirección'" [control]="form.controls.address" />
         }
-      </form>
-
-      <div actions>
         <app-submit-bar
           [loading]="loading()"
           [submitText]="'Registrarme'"
           [cancelText]="'Ir a login'"
           (cancel)="goToLogin()" />
-      </div>
+      </form>
     </app-form-card>
   </div>
 </div>

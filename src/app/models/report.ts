@@ -5,11 +5,11 @@ import {VoucherResponseDTO} from './voucher';
 
 export interface CashClosureReportRequest {
   today: Date;
-  ownerId: bigint;
+  ownerId: string;
 }
 
 export interface CustomerDebtsReportRequest {
-  customerId: bigint;
+  customerId: string;
 }
 
 export interface CustomerDebtsReport {

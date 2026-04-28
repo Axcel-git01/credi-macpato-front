@@ -1,9 +1,9 @@
 import Decimal from 'decimal.js';
 
 export interface PaymentRequestDTO{
-    customerId: bigint;
-    voucherId: bigint;
-    paidItemIds: bigint[];
+    customerId: string;
+    voucherId: string;
+    paidItemIds: string[];
 }
 
 export interface PaymentResponseDTO{
